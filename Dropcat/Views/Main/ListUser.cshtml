@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "MainPage";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rasterizehtml/1.3.0/rasterizeHTML.allinone.js"></script>
+<div  class="container-fluid body-content d-flex justify-content-center">
+    <div>
+     
+        <h2>ListUser</h2>
+        <form method="post">
+            <button class="btn btn-danger" asp-action="ExportExcel">Export Excel</button>
+        </form><br />
+        
+            <button id="toPDF" class="btn btn-danger" >Export PDF</button>
+       
+        <hr />
+        <div>
+            <table id="background" class="border">
+
+                <tr class="border">
+                    <th class="border">Id</th>
+                    <th class="border">Icon</th>
+                    <th class="border">Account</th>
+                    <th class="border">Email</th>
+                    <th class="border">Name</th>
+                    <th class="border">CreatTime</th>
+                </tr>
+
+                @{
+                    foreach (var UserList in Model)
+                    {
+                                    <tr class="border">
+                                        <td class="border">@UserList.id</td>
+                                       <td class="border"><img src="@UserList.icon" style="width:100px;height:100px" /></td> 
+                                        <td class="border">@UserList.userAccount</td>
+                                        <td class="border">@UserList.email</td>
+                                        <td class="border">@UserList.username</td>
+                                        <td class="border">@UserList.createtime</td>
+                                    </tr>
+
+                    }
+                }
+            </table>
+
+        </div>
+    </div>
+    </div>
+    
+    <script type="text/javascript">
+        window.jsPDF = window.jspdf.jsPDF;
+        function generatePdf() {
+            var canvas = document.createElement("canvas");
+            canvas.width= 2400;
+            canvas.height = 10000;
+           
+            var context = canvas.getContext('2d')
+            var fileContent = document.getElementById("background").outerHTML;
+            var options = {
+                width: 800,
+                height: 1000,
+                useCORS: true
+            };
+            rasterizeHTML.drawHTML(fileContent, canvas, options).then(function (renderResult) {
+            context.drawImage(renderResult.image, 0, 0);
+                console.log(canvas.toDataURL("image/png"));
+                var imgData = canvas.toDataURL("image/png");
+                var pdf = new jsPDF(); 
+                pdf.addImage(imgData, 'JPEG', 0, 0);
+                pdf.save("download.pdf");
+            });
+        }
+            document.getElementById('toPDF').addEventListener('click', generatePdf);
+    </script>
+    

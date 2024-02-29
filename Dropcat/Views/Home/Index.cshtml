@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+<link rel="stylesheet" href="~/css/styleLogin.css" />
+<main>
+    <div class="container-fluid" id="login">
+        <div class="row" id="loginTop">
+            <div class="col-1" id="leftCover"></div>
+            <!-- logo & slogan -->
+            <div class="col-7" id="logoBlock">
+                <!-- <div class="row align-items-center" id="logoArea">
+
+                </div> -->
+
+                <div class="col-3" id="logo">
+                    <img src="~/css/logo.png">
+                </div>
+                <div class="col-9" id="webName">
+                    <h1>DropCat</h1>
+                </div>
+
+                <div class="row">
+                    <div id="slogan">
+                        <span>-Every contact leaves a trace-</span>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-1"></div> -->
+            <!-- 登入區 -->
+            <!-- <div class="col-1"></div> -->
+            <div class="col-4" id="loginBar">
+                <div class="row" id="loginInput">
+                    <!-- 輸入資料 -->
+                    <!--action="/login" method="post"-->
+                    <form class="form needs-validation" id="loginForm">
+                        <h1 class="d-flex justify-content-center">Login</h1>
+                        <label class="text form-label has-validation">
+                            <input class="form-control" id="account" type="text" name="identifier"
+                                   placeholder="手機、用戶名或電子郵件">
+                        </label>
+                        <label class="text form-label has-validation">
+                            <input class="form-control" id="passwd" type="password" name="password" placeholder="密碼">
+                        </label>
+                        <input type="checkbox" id="rememberMe">記住我
+                        <a href="/resetMail">忘記密碼?</a><br>
+                        <button type="submit" id="signIn">登入</button>
+                    </form>
+                    <div th:if="${loginError}" class="error-message">
+                        <p th:text="${loginError}" style="color: red;"></p>
+                    </div>
+                    <!-- <div id="errorMsg"></div> -->
+                    <!-- 登入區與第三方登入區的分隔線 -->
+                    <div class="split">
+                        <div class="splitLeft"></div>
+                        <div class="splitCenter">或</div>
+                        <div class="splitLeft"></div>
+                    </div>
+
+                    <!-- 第三方登入 -->
+                    <div class="sso">
+                        <button id="facebook"><img src="~/css/facebook.png"></button>
+                        <button id="google"><img src="~/css/google.png"></button>
+                        <button id="line"><img src="~/css/line.png"></button>
+                    </div>
+
+                    <!-- 註冊帳號提醒 -->
+                    <div id="registerReminder" class="d-flex justify-content-center">
+                        <span>沒有帳號嗎？</span>
+                        <span><a href="/register">註冊</a></span>
+                        <span>帳號</span>
+                    </div>
+
+                    <!-- Footer -->
+                    <div id="loginFooter">
+                        <a href="">關於我們</a>
+                        <a href="">使用說明</a>
+                        <a href="">隱私條款</a>
+                    </div>
+
+                </div>
+
+                <!-- 分隔線
+                <div class="splitDown"></div> -->
+            </div>
+            <!-- <div class="col-1"></div> -->
+        </div>
+        <!-- footer -->
+        <!-- <div id="loginFooter">
+            <a href="">關於我們</a>
+            <a href="">使用說明</a>
+            <a href="">隱私條款</a>
+        </div> -->
+    </div>
+
+
+    <!-- 登入js -->
+    <script src="~/js/loginConfig.js" type='module'></script>
+</main>
