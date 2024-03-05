@@ -1,4 +1,5 @@
-﻿using Dropcat.Models;
+﻿using Dropcat.Data;
+using Dropcat.Models;
 using Dropcat.Models.Service.Impl;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
@@ -13,17 +14,26 @@ namespace Dropcat.Controllers
 {
     public class LoginController : Controller
     {
-       UserServiceImpl userService;
-        //GET: Verify
+        private readonly ILogger<LoginController> _logger;
+        private readonly ApplicationDbContext dbContext;
+        private readonly UserService userService;
+        public LoginController(ILogger<LoginController> logger, ApplicationDbContext context, UserService userService)
+        {
+            _logger = logger;
+            dbContext = context;
+            this.userService = userService;
+        }
+
+
+
         [HttpPost]
         public IActionResult Login( [FromBody] loginData loginData)
         {
           
-             userService = new UserServiceImpl();
             String identifier = loginData.username;
      
             String password = loginData.password;
-
+            Console.WriteLine(identifier + password);
             UserInfo user = userService.login(identifier, password);
 
            

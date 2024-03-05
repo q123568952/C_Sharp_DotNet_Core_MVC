@@ -1,5 +1,6 @@
 ﻿
 using BCrypt.Net;
+using Dropcat.Models.Dao;
 using Dropcat.Models.Dao.Impl;
 using Org.BouncyCastle.Crypto.Generators;
 using System;
@@ -12,25 +13,30 @@ namespace Dropcat.Models.Service.Impl
 {
     public class UserServiceImpl : UserService
     {
-        Models.Dao.Impl.UserDaoImpl userDaoImpl;
+        private readonly UserDao userDao;
+        public UserServiceImpl(UserDao userDao)
+        {
+            this.userDao = userDao;
+        }
+
 
         public UserInfo login(string identifier, string passwd)
         {
             UserInfo userInfo;
-            userDaoImpl = new Models.Dao.Impl.UserDaoImpl();
+   
             if (identifier.Contains("@"))
             {
-                userInfo = userDaoImpl.findByEmail(identifier);
+                userInfo = userDao.findByEmail(identifier);
        
             }
             else if (Regex.IsMatch(identifier, "^09\\d{8}$"))
             {
-                userInfo = userDaoImpl.findByPhonenumber(identifier);
+                userInfo = userDao.findByPhonenumber(identifier);
               
             }
             else
             {
-                userInfo = userDaoImpl.findByUserAccount(identifier);
+                userInfo = userDao.findByUserAccount(identifier);
                 
             }
 

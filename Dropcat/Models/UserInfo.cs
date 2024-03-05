@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -13,7 +14,7 @@ namespace Dropcat.Models
        
     public string userAccount {  get; set; }
        
-    public string username {  get; set; }
+    public string? username {  get; set; }
       
     public string phonenumber {  get; set; }
       
@@ -21,18 +22,18 @@ namespace Dropcat.Models
 
     public string password {  get; set; }
 
-    public DateTime createtime {  get; set; }
-      
-    public DateTime edittime {  get; set; }
+     public DateTime? createtime {  get; set; }
 
-    public string usericon {  get; set; }
+     public DateTime? edittime {  get; set; }
 
-    public string introduction {  get; set; }
+    public string? usericon {  get; set; }
 
-    private int gender {  get; set; }
+    public string? introduction {  get; set; }
 
-    public string resetToken {  get; set; }
+    private int? gender {  get; set; }
 
-    public DateTime tokenTime {  get; set; }
+    public string? resetToken {  get; set; }
+
+    public DateTime? tokenTime {  get; set; }
     }
 }

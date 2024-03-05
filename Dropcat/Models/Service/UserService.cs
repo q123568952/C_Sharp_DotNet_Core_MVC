@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dropcat.Models
 {
-    internal interface UserService
+    public interface UserService
     {
          UserInfo login(String identifier, String passwd);
          Boolean validatePassword(String inputPasswd, String storedPasswd, UserInfo user);

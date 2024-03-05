@@ -22,6 +22,7 @@ namespace Dropcat.Controllers
             string connstr = "server=dropcatasia.c10mg2ikizc4.ap-northeast-3.rds.amazonaws.com;port=3306;user=admin;password=Dropcat666;database=Dropcat;Charset=utf8;";
             conn = new MySqlConnection(connstr);
             MySqlCommand cmd = new MySqlCommand(sql, conn);
+           
             conn.Open();
             MySqlDataReader reader = cmd.ExecuteReader();
             userlist = new List<User>();
