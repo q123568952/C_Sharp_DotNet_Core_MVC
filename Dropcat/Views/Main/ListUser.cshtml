@@ -1,10 +1,9 @@
 ﻿
+
 @{
     ViewBag.Title = "MainPage";
 }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/rasterizehtml/1.3.0/rasterizeHTML.allinone.js"></script>
 <div  class="container-fluid body-content d-flex justify-content-center">
     <div>
      
@@ -31,10 +30,13 @@
                 @{
                     foreach (var UserList in Model)
                     {
-                                    <tr class="border">
+                       
+                        
+
+                        <tr class="border">
                                         <td class="border">@UserList.id</td>
-                                       <td class="border"><img src="@UserList.icon" style="width:100px;height:100px" /></td> 
-                                        <td class="border">@UserList.userAccount</td>
+                            <td class="border"><img id="imgg" src="@UserList.icon" style="width:100px;height:100px" /></td>
+                            <td class="border">@UserList.userAccount</td>
                                         <td class="border">@UserList.email</td>
                                         <td class="border">@UserList.username</td>
                                         <td class="border">@UserList.createtime</td>
@@ -47,30 +49,57 @@
         </div>
     </div>
     </div>
-    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdn.bootcss.com/jspdf/1.3.4/jspdf.debug.js"></script>
+
     <script type="text/javascript">
-        window.jsPDF = window.jspdf.jsPDF;
-        function generatePdf() {
-            var canvas = document.createElement("canvas");
-            canvas.width= 2400;
-            canvas.height = 10000;
-           
-            var context = canvas.getContext('2d')
-            var fileContent = document.getElementById("background").outerHTML;
-            var options = {
-                width: 800,
-                height: 1000,
-                useCORS: true
-            };
-            rasterizeHTML.drawHTML(fileContent, canvas, options).then(function (renderResult) {
-            context.drawImage(renderResult.image, 0, 0);
-                console.log(canvas.toDataURL("image/png"));
-                var imgData = canvas.toDataURL("image/png");
-                var pdf = new jsPDF(); 
-                pdf.addImage(imgData, 'JPEG', 0, 0);
-                pdf.save("download.pdf");
-            });
+
+    window.onload = function () {
+        var downPdf = document.getElementById("toPDF");
+        downPdf.onclick = function () {
+            html2canvas(
+                document.getElementById("background"),
+                {
+                    dpi: 172,//匯出pdf清晰度
+                    onrendered: function (canvas) {
+
+                        var contentWidth = canvas.width;
+                        var contentHeight = canvas.height;
+
+                        //一頁pdf顯示html頁面生成的canvas高度;
+                        var pageHeight = contentWidth / 592.28 * 841.89;
+                        //未生成pdf的html頁面高度
+                        var leftHeight = contentHeight;
+                        //pdf頁面偏移
+                        var position = 0;
+                        //html頁面生成的canvas在pdf中圖片的寬高（a4紙的尺寸[595.28,841.89]）
+                        var imgWidth = 595.28;
+                        var imgHeight = 592.28 / contentWidth * contentHeight;
+
+                        var pageData = canvas.toDataURL('image/jpeg', 1.0);
+                        var pdf = new jsPDF('', 'pt', 'a4');
+
+                        //有兩個高度需要區分，一個是html頁面的實際高度，和生成pdf的頁面高度(841.89)
+                        //當內容未超過pdf一頁顯示的範圍，無需分頁
+                        if (leftHeight < pageHeight) {
+                            pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight);
+                        } else {
+                            while (leftHeight > 0) {
+                                pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                                leftHeight -= pageHeight;
+                                position -= 841.89;
+                                //避免新增空白頁
+                                if (leftHeight > 0) {
+                                    pdf.addPage();
+                                }
+                            }
+                        }
+                        pdf.save('myPDF.pdf');
+                    }, 
+                    //背景設為白色（預設為黑色）
+                    background: "#fff"
+                })
         }
-            document.getElementById('toPDF').addEventListener('click', generatePdf);
+    }
     </script>
     

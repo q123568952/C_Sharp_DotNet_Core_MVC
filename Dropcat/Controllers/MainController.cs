@@ -6,6 +6,8 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web;
 
 
@@ -30,7 +32,7 @@ namespace Dropcat.Controllers
             {
                 User user = new User();
                 user.id = (int)reader["id"];
-                user.icon = (string)reader["usericon"];
+                user.icon = urltobase64((string)reader["usericon"]);
                 user.userAccount = (string)reader["userAccount"];
                 user.email = (string)reader["email"];
                 user.username = (string)reader["username"];
@@ -112,8 +114,25 @@ namespace Dropcat.Controllers
             {
                 workbook.SaveAs(stream);
                 var content = stream.ToArray();
+
                 return File(content, contentType, fileName);
             }
         }
+
+        //轉換urltobase64
+        public String urltobase64(String url)
+        {
+            try {
+                WebClient webClient = new();
+                byte[] Bytes = webClient.DownloadData(url);
+                string Base64 = Convert.ToBase64String(Bytes);
+                Base64 = "data:image/jpg;base64,"+ Base64;
+                return Base64;
+
+            }catch (Exception e) {
+                return null;
+            }
+        }
+
     }
 }
